@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management System</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+        }
+
+        .container{
+            width:80%;
+            margin:auto;
+            background:white;
+            padding:20px;
+            margin-top:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+
+        h1,h3{
+            text-align:center;
+            color:#003366;
+        }
+
+        input{
+            padding:8px;
+            margin:5px;
+            width:250px;
+        }
+
+        button{
+            padding:8px 15px;
+            background:green;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table,th,td{
+            border:1px solid black;
+        }
+
+        th{
+            background:#003366;
+            color:white;
+            padding:10px;
+        }
+
+        td{
+            text-align:center;
+            padding:10px;
+        }
+
+        .welcome{
+            color:green;
+            font-weight:bold;
+        }
+
+        a{
+            text-decoration:none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1> Library Management System</h1>
+
+<h2>Dashboard</h2>
+
+<div style="display:flex;gap:20px;margin-bottom:20px;">
+    <div style="background:#4CAF50;color:white;padding:15px;border-radius:8px;">
+        <h3>Total Books</h3>
+        <h2>{{ total_books }}</h2>
+    </div>
+
+    <div style="background:#2196F3;color:white;padding:15px;border-radius:8px;">
+        <h3>Total Students</h3>
+        <h2>{{ total_students }}</h2>
+    </div>
+
+    <div style="background:#FF9800;color:white;padding:15px;border-radius:8px;">
+        <h3>Issued Books</h3>
+        <h2>{{ issued_books }}</h2>
+    </div>
+
+    <div style="background:#9C27B0;color:white;padding:15px;border-radius:8px;">
+        <h3>Available Books</h3>
+        <h2>{{ available_books }}</h2>
+    </div>
+</div>
+
+<hr>
+
+
+
+{% if user.is_authenticated %}
+
+<p class="welcome">
+Welcome, {{ user.username }} |
+<a href="/logout/">Logout</a>
+</p>
+
+<a href="/student/">
+    <button type="button">Student Registration</button>
+</a>
+
+<a href="/issue/">
+    <button type="button">Issue Book</button>
+</a>
+
+<br><br>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Book</button>
+</form>
+
+<br>
+
+<form method="GET">
+    <input type="text" name="search" placeholder="Search Book" value="{{ request.GET.search }}">
+    <button type="submit">Search</button>
+    <a href="/"><button type="button">Reset</button></a>
+</form>
+
+{% else %}
+
+<p align="center">
+    <a href="/login/">Login</a>
+</p>
+
+{% endif %}
+
+<hr>
+
+<h3>Total Books : {{ books|length }}</h3>
+
+<form method="GET">
+    <input type="text" name="search" placeholder="Search Book..."
+           value="{{ request.GET.search }}">
+    <button type="submit">Search</button>
+</form>
+
+<br>
+
+<table>
+    <tr>
+        <th>cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for book in books %}
+<tr>
+
+<td>
+    {% if book.cover %}
+        <img src="{{ book.cover.url }}" width="60" height="80">
+    {% else %}
+        No Image
+    {% endif %}
+</td>
+
+<td>{{ book.title }}</td>
+<td>{{ book.author }}</td>
+<td>₹{{ book.price }}</td>
+
+        <td>
+            {% if book.available %}
+                Available
+            {% else %}
+                Issued
+            {% endif %}
+        </td>
+
+        <td>
+            <a href="/edit/{{ book.id }}/">Edit</a> |
+            <a href="/delete/{{ book.id }}/">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

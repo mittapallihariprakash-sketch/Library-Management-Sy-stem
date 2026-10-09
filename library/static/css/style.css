@@ -1,0 +1,112 @@
+body{
+    background:#f5f7fa;
+    font-family:Arial,sans-serif;
+    margin:30px;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+}
+
+h2,h3{
+    color:#34495e;
+}
+
+form{
+    margin-bottom:20px;
+}
+
+input{
+    width:250px;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#218838;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table, th, td{
+    border:1px solid #ddd;
+}
+
+th, td{
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#2c3e50;
+    color:white;
+}
+
+a{
+    text-decoration:none;
+}
+
+.edit{
+    color:blue;
+    margin-right:10px;
+}
+
+.delete{
+    color:red;
+}
+.edit{
+    color:blue;
+    margin-right:10px;
+}
+
+.delete{
+    color:red;
+}
+
+/* Paste below this */
+
+.edit{
+    color:white;
+    background:#007bff;
+    padding:5px 10px;
+    border-radius:4px;
+    text-decoration:none;
+    margin-right:5px;
+}
+
+.delete{
+    color:white;
+    background:#dc3545;
+    padding:5px 10px;
+    border-radius:4px;
+    text-decoration:none;
+}
+
+.edit:hover{
+    background:#0056b3;
+}
+
+.delete:hover{
+    background:#c82333;
+}

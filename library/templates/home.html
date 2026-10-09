@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management System</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+        }
+
+        .container{
+            width:80%;
+            margin:auto;
+            background:white;
+            padding:20px;
+            margin-top:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+
+        h1,h3{
+            text-align:center;
+            color:#003366;
+        }
+
+        input{
+            padding:8px;
+            margin:5px;
+            width:250px;
+        }
+
+        button{
+            padding:8px 15px;
+            background:green;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table,th,td{
+            border:1px solid black;
+        }
+
+        th{
+            background:#003366;
+            color:white;
+            padding:10px;
+        }
+
+        td{
+            text-align:center;
+            padding:10px;
+        }
+
+        .welcome{
+            color:green;
+            font-weight:bold;
+        }
+
+        a{
+    text-decoration:none;
+}
+
+.dashboard{
+    display:flex;
+    gap:20px;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.card{
+    flex:1;
+    min-width:200px;
+    padding:20px;
+    color:white;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.green{
+    background:#28a745;
+}
+
+.blue{
+    background:#007bff;
+}
+
+.orange{
+    background:#fd7e14;
+}
+
+.purple{
+    background:#6f42c1;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1> Library Management System</h1>
+
+<h2>Dashboard</h2>
+
+<div class="dashboard">
+
+    <div class="card green">
+        <h3>Total Books</h3>
+        <h2>{{ total_books }}</h2>
+    </div>
+
+    <div class="card blue">
+        <h3>Total Students</h3>
+        <h2>{{ total_students }}</h2>
+    </div>
+
+    <div class="card orange">
+        <h3>Issued Books</h3>
+        <h2>{{ issued_books }}</h2>
+    </div>
+
+    <div class="card purple">
+        <h3>Available Books</h3>
+        <h2>{{ available_books }}</h2>
+    </div>
+
+</div>
+
+
+{% if user.is_authenticated %}
+
+<p class="welcome">
+Welcome, {{ user.username }} |
+<a href="/logout/">Logout</a>
+</p>
+
+<a href="/student/">
+    <button type="button">Student Registration</button>
+</a>
+
+<a href="/issue/">
+    <button type="button">Issue Book</button>
+</a>
+
+<br><br>
+<div class="form-card">
+<h3>Add New Book</h3>
+
+<form method="POST" enctype="multipart/form-data">  
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Book</button>
+</form>
+</div>
+
+<br>
+
+<form method="GET">
+    <input type="text" name="search" placeholder="Search Book" value="{{ request.GET.search }}">
+    <button type="submit">Search</button>
+    <a href="/"><button type="button">Reset</button></a>
+</form>
+
+{% else %}
+
+<p align="center">
+    <a href="/login/">Login</a>
+</p>
+
+{% endif %}
+
+<hr>
+
+<h3>Total Books : {{ books|length }}</h3>
+
+<br>
+
+<table>
+    <tr>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for book in books %}
+    <tr>
+
+        <td>
+            {% if book.cover %}
+                <img src="{{ book.cover.url }}" width="60" height="80">
+            {% else %}
+                No Image
+            {% endif %}
+        </td>
+
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>₹{{ book.price }}</td>
+
+        <td>
+            {% if book.available %}
+                Available
+            {% else %}
+                Issued
+            {% endif %}
+        </td>
+
+        <td>
+            <a href="/edit/{{ book.id }}/">Edit</a> |
+            <a href="/delete/{{ book.id }}/">Delete</a>
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+

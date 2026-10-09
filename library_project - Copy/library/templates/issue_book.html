@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Issue Book</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+<h1> Issue Book</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Issue Book</button>
+</form>
+
+<hr>
+
+<h2>Issued Books</h2>
+
+<table border="1">
+
+<tr>
+    <th>Student</th>
+    <th>Book</th>
+    <th>Issue Date</th>
+    <th>Return Date</th>
+    <th>Fine</th>
+    <th>Action</th>
+</tr>
+
+{% for issue in issues %}
+
+<tr>
+    <td>{{ issue.student.name }}</td>
+    <td>{{ issue.book.title }}</td>
+    <td>{{ issue.issue_date }}</td>
+    <td>{{ issue.return_date|default:"Not Returned" }}</td>
+    <td>₹{{ issue.fine }}</td>
+    <td>
+    {% if not issue.return_date %}
+        <a href="/return/{{ issue.id }}/">Return</a>
+    {% else %}
+        Returned
+    {% endif %}
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/">⬅ Back to Library</a>
+
+</div>
+
+</body>
+</html>
